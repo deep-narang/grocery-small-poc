@@ -1,0 +1,70 @@
+package com.grocerymart.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.grocerymart.dto.CartResponseDTO;
+import com.grocerymart.dto.GroceryItemDTO;
+import com.grocerymart.dto.GroceryItemResponseDTO;
+import com.grocerymart.entity.GroceryItem;
+import com.grocerymart.service.CartService;
+import com.grocerymart.service.GroceryItemService;
+import com.grocerymart.service.GroceryItemServiceImpl;
+
+@RestController
+@RequestMapping("/grocery")
+public class GroceryController {
+	
+	@Autowired
+	private GroceryItemService groceryItemService;
+	
+	@Autowired
+	private CartService cartService;
+	
+	@GetMapping
+	public GroceryItemResponseDTO getAvailableGrocery() {
+		return groceryItemService.getAvailableGrocery();
+	}
+
+	@PostMapping("/add")
+	public GroceryItem addNewItem(@RequestBody GroceryItemDTO groceryItemDTO) {
+		return groceryItemService.addGroceryItem(groceryItemDTO);
+	}
+	
+	@GetMapping("/all")
+	public GroceryItemResponseDTO getAllGroceryItems() {
+		return groceryItemService.getAllGroceryItems();
+	}
+	
+	@PostMapping("/remove/{id}")
+	public boolean markItemAsOutOfStock(@PathVariable Long id) {
+		return groceryItemService.markAsOutOfStock(id);
+	}
+	
+	@PutMapping("/update/{id}")
+	public GroceryItem updateItem(@PathVariable Long id, @RequestBody GroceryItemDTO groceryItem) {
+		return groceryItemService.updateItem(groceryItem, id);
+	}
+	
+	@PutMapping("/manage/id/{id}/inventory/{inventory}")
+	public GroceryItem updateInventory(@PathVariable Long id, @PathVariable Long inventory) {
+		return groceryItemService.updateInvetory(id, inventory);
+	}
+	
+	@GetMapping("/cart/view")
+	public CartResponseDTO getProductsFromCart() {
+		return cartService.getCartItems();
+	}
+	
+	@PostMapping("/cart/add/{id}")
+	public boolean addProductToCart(@PathVariable Long id) {
+		return cartService.addItemToCart(id);
+	}
+	
+}

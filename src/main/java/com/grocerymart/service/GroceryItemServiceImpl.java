@@ -80,14 +80,16 @@ public class GroceryItemServiceImpl implements GroceryItemService{
 		}
 		GroceryItem item = groceryItem.get();
 		item.setInventory(inventory);
-		item.setOutOfStock(inventory>0);
+		item.setOutOfStock(inventory<=0);
 		return groceryItemDAO.save(item);
 	}
 
 	@Override
 	public GroceryItemResponseDTO getAvailableGrocery() {
-		List<GroceryItemDTO> groceryDtoList = groceryItemDAO.findByOutOfStock(false)
-				.stream().map(item -> ObjectConversionUtil.groceryEntityToDTO(item))
+		List<GroceryItemDTO> groceryDtoList = groceryItemDAO.findAll()
+				.stream()
+				.filter(item -> !item.isOutOfStock())
+				.map(item -> ObjectConversionUtil.groceryEntityToDTO(item))
 				.collect(Collectors.toList());
 		
 		return GroceryItemResponseDTO.builder()

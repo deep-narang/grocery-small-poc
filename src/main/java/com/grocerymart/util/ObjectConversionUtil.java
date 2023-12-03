@@ -18,7 +18,7 @@ public class ObjectConversionUtil {
 				.itemName(groceryItemDTO.getItemName())
 				.inventory(groceryItemDTO.getInventory())
 				.itemPrice(groceryItemDTO.getItemPrice())
-				.outOfStock(groceryItemDTO.getInventory()>0)
+				.outOfStock(groceryItemDTO.getInventory()<=0)
 				.build();
 	}
 	

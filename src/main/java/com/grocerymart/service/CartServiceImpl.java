@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.grocerymart.dao.CartDAO;
 import com.grocerymart.dao.GroceryItemDAO;
+import com.grocerymart.dto.CartDTO;
 import com.grocerymart.dto.CartResponseDTO;
 import com.grocerymart.entity.Cart;
 import com.grocerymart.entity.GroceryItem;
@@ -42,7 +43,7 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	@Transactional(value = TxType.REQUIRED)
-	public boolean addItemToCart(Long id) {
+	public boolean addItemToCart(Long id, CartDTO cartDTO) {
 		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
 		if(groceryItem.isEmpty()) {
 			throw new GroceryItemNotFound("Item Not FOund");
@@ -54,7 +55,11 @@ public class CartServiceImpl implements CartService {
 		User loggedInUser = userHelper.getLoggedInUser();
 		Cart userCart = cartDAO.findByUser(loggedInUser);
 		if (null != userCart) {
-			userCart.getItemsList().add(item);
+			if(cartHelper.checkIfItemInCart(userCart.getItemsList(), item)) {
+				userCart.setQuantity(userCart.getQuantity() + cartDTO.getQuantity());
+			} else {
+				userCart.getItemsList().add(item);
+			}
 			cartDAO.save(userCart);
 		} else {
 			List<GroceryItem> itemsList = new ArrayList<GroceryItem>();

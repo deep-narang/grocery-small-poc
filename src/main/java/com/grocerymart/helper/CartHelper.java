@@ -14,6 +14,18 @@ import com.grocerymart.util.ObjectConversionUtil;
 @Service
 public class CartHelper {
 
+	public CartResponseDTO getCartItems(Cart findByUser, User user) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public boolean checkIfItemInCart(List<GroceryItem> itemsList, GroceryItem item) {
+		GroceryItem groceryItem = itemsList.stream()
+				.filter(product -> product.getId() == item.getId())
+				.findFirst().orElse(null);
+		return null != groceryItem ? true : false; 
+	}
+
 	
 
 }

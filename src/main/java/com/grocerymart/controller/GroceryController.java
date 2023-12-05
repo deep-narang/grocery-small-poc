@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.grocerymart.dto.CartDTO;
 import com.grocerymart.dto.CartResponseDTO;
 import com.grocerymart.dto.GroceryItemDTO;
 import com.grocerymart.dto.GroceryItemResponseDTO;
@@ -71,8 +72,8 @@ public class GroceryController {
 	
 	@PostMapping("/cart/add/{id}")
 	@PreAuthorize("hasRole('USER')")
-	public boolean addProductToCart(@PathVariable Long id) {
-		return cartService.addItemToCart(id);
+	public boolean addProductToCart(@PathVariable Long id, @RequestBody CartDTO cartDTO) {
+		return cartService.addItemToCart(id, cartDTO);
 	}
 	
 }

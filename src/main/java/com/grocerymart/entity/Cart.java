@@ -31,6 +31,9 @@ public class Cart {
 	@JoinColumn(name = "user_id")
 	private User user;
 	
+	@Column(name = "quantity")
+	private Long quantity;
+	
 	@OneToMany
 	@JoinColumn(name = "item_id")
 	List<GroceryItem> itemsList = new ArrayList<>();

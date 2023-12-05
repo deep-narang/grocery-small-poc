@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.grocerymart.dao.CartDAO;
 import com.grocerymart.dao.GroceryItemDAO;
@@ -21,6 +22,7 @@ import com.grocerymart.helper.UserHelper;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
 
+@Service
 public class CartServiceImpl implements CartService {
 	
 	@Autowired

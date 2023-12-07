@@ -41,6 +41,10 @@ public class SecurityConfiguration {
 		.sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
+		.headers()
+		.frameOptions()
+		.disable()
+		.and()
 		.authenticationManager(authenticationManager)
 		.httpBasic();
 		return http.build();

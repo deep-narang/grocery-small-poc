@@ -19,8 +19,10 @@ import com.grocerymart.service.CartService;
 import com.grocerymart.service.GroceryItemService;
 import com.grocerymart.service.GroceryItemServiceImpl;
 
+import com.grocerymart.constants.*;
+
 @RestController
-@RequestMapping("/grocery")
+@RequestMapping(value = ControllerConstant.GROCERY_BASE_URL)
 public class GroceryController {
 	
 	@Autowired
@@ -34,44 +36,44 @@ public class GroceryController {
 		return groceryItemService.getAvailableGrocery();
 	}
 
-	@PostMapping("/add")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping(value = ControllerConstant.ADD_GROCERY)
+	@PreAuthorize(value = ControllerConstant.ADMIN_AUTHORITY)
 	public GroceryItem addNewItem(@RequestBody GroceryItemDTO groceryItemDTO) {
 		return groceryItemService.addGroceryItem(groceryItemDTO);
 	}
 	
-	@GetMapping("/all")
-	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(value = ControllerConstant.GET_ALL_GROCERY)
+	@PreAuthorize(value = ControllerConstant.ADMIN_AUTHORITY)
 	public GroceryItemResponseDTO getAllGroceryItems() {
 		return groceryItemService.getAllGroceryItems();
 	}
 	
-	@PostMapping("/remove/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping(value = ControllerConstant.REMOVE_ITEM)
+	@PreAuthorize(value = ControllerConstant.ADMIN_AUTHORITY)
 	public boolean markItemAsOutOfStock(@PathVariable Long id) {
 		return groceryItemService.markAsOutOfStock(id);
 	}
 	
-	@PutMapping("/update/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping(value = ControllerConstant.UPDATE_ITEM)
+	@PreAuthorize(value = ControllerConstant.ADMIN_AUTHORITY)
 	public GroceryItem updateItem(@PathVariable Long id, @RequestBody GroceryItemDTO groceryItem) {
 		return groceryItemService.updateItem(groceryItem, id);
 	}
 	
-	@PutMapping("/manage/id/{id}/inventory/{inventory}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping(value = ControllerConstant.UPDATE_INVENTORY)
+	@PreAuthorize(value = ControllerConstant.ADMIN_AUTHORITY)
 	public GroceryItem updateInventory(@PathVariable Long id, @PathVariable Long inventory) {
 		return groceryItemService.updateInvetory(id, inventory);
 	}
 	
-	@GetMapping("/cart/view")
-	@PreAuthorize("hasRole('USER')")
+	@GetMapping(value = ControllerConstant.ITEMS_IN_CART)
+	@PreAuthorize(value = ControllerConstant.USER_AUTHORITY)
 	public CartResponseDTO getProductsFromCart() {
 		return cartService.getCartItems();
 	}
 	
-	@PostMapping("/cart/add/{id}")
-	@PreAuthorize("hasRole('USER')")
+	@PostMapping(value = ControllerConstant.ADD_ITEM_IN_CART)
+	@PreAuthorize(value = ControllerConstant.USER_AUTHORITY)
 	public boolean addProductToCart(@PathVariable Long id, @RequestBody CartDTO cartDTO) {
 		return cartService.addItemToCart(id, cartDTO);
 	}

@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.grocerymart.constants.Constants;
 import com.grocerymart.dao.CartDAO;
 import com.grocerymart.dao.GroceryItemDAO;
 import com.grocerymart.dto.CartDTO;
@@ -48,11 +49,11 @@ public class CartServiceImpl implements CartService {
 	public boolean addItemToCart(Long id, CartDTO cartDTO) {
 		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
 		if(groceryItem.isEmpty()) {
-			throw new GroceryItemNotFound("Item Not FOund");
+			throw new GroceryItemNotFound(Constants.ITEM_NOT_FOUND);
 		}
 		GroceryItem item = groceryItem.get();
 		if (item.isOutOfStock()) {
-			throw new OutOfStock("Item Out of Stock");
+			throw new OutOfStock(Constants.OUT_OF_STOCK);
 		}
 		User loggedInUser = userHelper.getLoggedInUser();
 		Cart userCart = cartDAO.findByUser(loggedInUser);

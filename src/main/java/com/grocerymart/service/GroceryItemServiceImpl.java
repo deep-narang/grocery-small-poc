@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.grocerymart.constants.Constants;
 import com.grocerymart.dao.GroceryItemDAO;
 import com.grocerymart.dto.GroceryItemDTO;
 import com.grocerymart.dto.GroceryItemResponseDTO;
@@ -56,12 +57,12 @@ public class GroceryItemServiceImpl implements GroceryItemService{
 	public boolean markAsOutOfStock(Long id) {
 		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
 		if (groceryItem.isEmpty()) {
-			logger.error("Item with id {} not found!");
-			throw new GroceryItemNotFound("Item with specified id not found!");
+			logger.error(Constants.ITEM_NOT_FOUND);
+			throw new GroceryItemNotFound(Constants.ITEM_NOT_FOUND);
 		}
 		GroceryItem item = groceryItem.get();
 		groceryItemDAO.delete(item);
-		logger.info("Item with id {} marked as out of stock", id);
+		logger.info(Constants.REMOVE_ITEM, id);
 		return true;
 	}
 
@@ -76,7 +77,7 @@ public class GroceryItemServiceImpl implements GroceryItemService{
 	public GroceryItem updateInvetory(Long id, Long inventory) {
 		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
 		if (groceryItem.isEmpty()) {
-			throw new GroceryItemNotFound("Item with specified id not found!");
+			throw new GroceryItemNotFound(Constants.ITEM_NOT_FOUND);
 		}
 		GroceryItem item = groceryItem.get();
 		item.setInventory(inventory);

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.grocerymart.constants.Constants;
+import com.grocerymart.constants.ControllerConstant;
 import com.grocerymart.dao.GroceryItemDAO;
 import com.grocerymart.dto.GroceryItemDTO;
 import com.grocerymart.entity.GroceryItem;
@@ -23,11 +25,11 @@ public class GroceryItemHelper {
 	public GroceryItem updateGroceryItem(GroceryItemDTO groceryItemDTO, Long id) {
 		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
 		if(groceryItem.isEmpty()) {
-			throw new GroceryItemNotFound("Item with specified id not found!");
+			throw new GroceryItemNotFound(Constants.ITEM_NOT_FOUND);
 		}
 		GroceryItem item = groceryItem.get();
 		
-		logger.info("Updating the Items fields");
+		logger.info(Constants.UPDATE_ITEM_FIELD);
 		if (null != groceryItemDTO.getInventory()) {
 			item.setInventory(groceryItemDTO.getInventory());
 			item.setOutOfStock(groceryItemDTO.getInventory() > 0);

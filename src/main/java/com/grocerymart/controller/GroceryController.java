@@ -1,5 +1,7 @@
 package com.grocerymart.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +16,13 @@ import com.grocerymart.dto.CartDTO;
 import com.grocerymart.dto.CartResponseDTO;
 import com.grocerymart.dto.GroceryItemDTO;
 import com.grocerymart.dto.GroceryItemResponseDTO;
+import com.grocerymart.dto.UserDTO;
 import com.grocerymart.entity.GroceryItem;
+import com.grocerymart.entity.User;
 import com.grocerymart.service.CartService;
 import com.grocerymart.service.GroceryItemService;
 import com.grocerymart.service.GroceryItemServiceImpl;
-
+import com.grocerymart.service.UserService;
 import com.grocerymart.constants.*;
 
 @RestController
@@ -30,6 +34,9 @@ public class GroceryController {
 	
 	@Autowired
 	private CartService cartService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@GetMapping
 	public GroceryItemResponseDTO getAvailableGrocery() {
@@ -76,6 +83,12 @@ public class GroceryController {
 	@PreAuthorize(value = ControllerConstant.USER_AUTHORITY)
 	public boolean addProductToCart(@PathVariable Long id, @RequestBody CartDTO cartDTO) {
 		return cartService.addItemToCart(id, cartDTO);
+	}
+	
+	@GetMapping(value = ControllerConstant.ALL_USERS)
+	@PreAuthorize(value = ControllerConstant.ADMIN_AUTHORITY)
+	public List<UserDTO> getAllUsers() {
+		return userService.getAllUsers();
 	}
 	
 }

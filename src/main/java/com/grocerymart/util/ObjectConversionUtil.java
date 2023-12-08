@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.grocerymart.dto.GroceryItemDTO;
+import com.grocerymart.dto.UserDTO;
 import com.grocerymart.entity.GroceryItem;
 import com.grocerymart.entity.GroceryItem.GroceryItemBuilder;
+import com.grocerymart.entity.User;
 
 public class ObjectConversionUtil {
 	
@@ -29,6 +31,15 @@ public class ObjectConversionUtil {
 				.itemPrice(groceryItem.getItemPrice())
 				.inventory(groceryItem.getInventory())
 				.build();
+	}
+	
+	public static UserDTO userEntityToDTOConversion(User user) {
+		UserDTO userDTO = new UserDTO();
+		userDTO.setFirstName(user.getFirstName());
+		userDTO.setLastName(user.getLastName());
+		userDTO.setRole(user.getRole().getRole());
+		userDTO.setUserName(user.getUserName());
+		return userDTO;
 	}
 
 }

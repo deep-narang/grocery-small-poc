@@ -29,16 +29,16 @@ public class GroceryItem implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String itemName;
 	
-	@Column(name = "price")
+	@Column(name = "price", nullable = false)
 	private Double itemPrice;
 	
-	@Column(name = "in_stock")
+	@Column(name = "in_stock", nullable = false)
 	private boolean outOfStock;
 	
-	@Column(name = "inventory")
+	@Column(name = "inventory", nullable = false)
 	private Long inventory;
 
 	@Override

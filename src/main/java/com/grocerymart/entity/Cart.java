@@ -32,10 +32,9 @@ public class Cart {
 	private User user;
 	
 	@Column(name = "quantity", nullable = false)
-	private Long quantity;
+	private Integer quantity;
 	
 	@OneToMany
-	@JoinColumn(name = "item_id")
 	List<GroceryItem> itemsList = new ArrayList<>();
 
 }

@@ -2,6 +2,7 @@ package com.grocerymart.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +26,19 @@ import jakarta.transaction.Transactional.TxType;
 
 @Service
 public class CartServiceImpl implements CartService {
-	
+
 	@Autowired
 	private UserHelper userHelper;
 
 	@Autowired
-	private CartDAO cartDAO; 
-	
+	private CartDAO cartDAO;
+
 	@Autowired
 	private CartHelper cartHelper;
-	
+
 	@Autowired
 	private GroceryItemDAO groceryItemDAO;
-	
+
 	@Override
 	public CartResponseDTO getCartItems() {
 		User user = userHelper.getLoggedInUser();
@@ -48,7 +49,7 @@ public class CartServiceImpl implements CartService {
 	@Transactional(value = TxType.REQUIRED)
 	public boolean addItemToCart(Long id, CartDTO cartDTO) {
 		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
-		if(groceryItem.isEmpty()) {
+		if (groceryItem.isEmpty()) {
 			throw new GroceryItemNotFound(Constants.ITEM_NOT_FOUND);
 		}
 		GroceryItem item = groceryItem.get();
@@ -57,19 +58,22 @@ public class CartServiceImpl implements CartService {
 		}
 		User loggedInUser = userHelper.getLoggedInUser();
 		Cart userCart = cartDAO.findByUser(loggedInUser);
-		if (null != userCart) {
-			if(cartHelper.checkIfItemInCart(userCart.getItemsList(), item)) {
-				userCart.setQuantity(userCart.getQuantity() + cartDTO.getQuantity());
+		int quantity = Objects.nonNull(cartDTO) && Objects.nonNull(cartDTO.getQuantity()) ? cartDTO.getQuantity() : 1;
+		if (Objects.nonNull(userCart)) {
+			if (cartHelper.checkIfItemInCart(userCart.getItemsList(), item)) {
+				userCart.setQuantity(userCart.getQuantity() + quantity);
 			} else {
+				userCart.setQuantity(quantity);
 				userCart.getItemsList().add(item);
 			}
 			cartDAO.save(userCart);
 		} else {
-			List<GroceryItem> itemsList = new ArrayList<GroceryItem>();
+			List<GroceryItem> itemsList = new ArrayList<>();
 			Cart cart = new Cart();
 			cart.setUser(loggedInUser);
 			itemsList.add(item);
 			cart.setItemsList(itemsList);
+			cart.setQuantity(quantity);
 			cartDAO.save(cart);
 		}
 		return true;

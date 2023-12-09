@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CartDTO {
-	private Long quantity;
+	private Integer quantity;
 }

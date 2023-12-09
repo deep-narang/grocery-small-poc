@@ -30,6 +30,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(Exception.class)
 	public Map<String, Object> genericException(Exception e) {
 		Map<String, Object> errorMap = new HashMap<>();
 		errorMap.put("errorMessage", e.getMessage());

@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -27,14 +28,14 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	@Column(name = "user_id")
+	private Long userId;
 	
 	@Column(name = "quantity", nullable = false)
 	private Integer quantity;
 	
-	@OneToMany
-	List<GroceryItem> itemsList = new ArrayList<>();
+	@ManyToOne
+	@JoinColumn(name = "item_id")
+	GroceryItem item;
 
 }

@@ -42,7 +42,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public CartResponseDTO getCartItems() {
 		User user = userHelper.getLoggedInUser();
-		return cartHelper.getCartItems(cartDAO.findByUser(user), user);
+		return cartHelper.getCartItems(cartDAO.findByUserId(user.getId()), user);
 	}
 
 	@Override
@@ -56,26 +56,13 @@ public class CartServiceImpl implements CartService {
 		if (item.isOutOfStock()) {
 			throw new OutOfStock(Constants.OUT_OF_STOCK);
 		}
-		User loggedInUser = userHelper.getLoggedInUser();
-		Cart userCart = cartDAO.findByUser(loggedInUser);
 		int quantity = Objects.nonNull(cartDTO) && Objects.nonNull(cartDTO.getQuantity()) ? cartDTO.getQuantity() : 1;
-		if (Objects.nonNull(userCart)) {
-			if (cartHelper.checkIfItemInCart(userCart.getItemsList(), item)) {
-				userCart.setQuantity(userCart.getQuantity() + quantity);
-			} else {
-				userCart.setQuantity(quantity);
-				userCart.getItemsList().add(item);
-			}
-			cartDAO.save(userCart);
-		} else {
-			List<GroceryItem> itemsList = new ArrayList<>();
-			Cart cart = new Cart();
-			cart.setUser(loggedInUser);
-			itemsList.add(item);
-			cart.setItemsList(itemsList);
-			cart.setQuantity(quantity);
-			cartDAO.save(cart);
-		}
+		Cart cart = new Cart();
+		cart.setUserId(userHelper.getLoggedInUser().getId());
+		cart.setItem(item);
+		cart.setQuantity(quantity);
+		cartDAO.save(cart);
+
 		return true;
 	}
 

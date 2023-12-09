@@ -15,26 +15,20 @@ import com.grocerymart.util.ObjectConversionUtil;
 @Service
 public class CartHelper {
 
-	public CartResponseDTO getCartItems(Cart findByUser, User user) {
+	public CartResponseDTO getCartItems(List<Cart> findByUser, User user) {
 		CartResponseDTO cartResponseDTO = new CartResponseDTO();
 		cartResponseDTO.setUserName(user.getUserName());
 		cartResponseDTO.setRole(user.getRole().getRole());
-		if (null != findByUser) {
-			List<GroceryItemDTO> dtoList = findByUser.getItemsList().stream()
-			.map(item -> ObjectConversionUtil.groceryEntityToDTO(item))
-			.collect(Collectors.toList());
-			cartResponseDTO.setGroceryItemDTOList(dtoList);
-		}
+		cartResponseDTO.setGroceryItemDTOList(findByUser.stream().map(cart -> {
+			GroceryItem item = cart.getItem();
+			return GroceryItemDTO.builder()
+					.id(item.getId())
+					.itemName(item.getItemName())
+					.itemPrice(item.getItemPrice())
+					.inventory(cart.getQuantity().longValue())
+					.build();
+		}).collect(Collectors.toList()));
 		return cartResponseDTO;
 	}
-	
-	public boolean checkIfItemInCart(List<GroceryItem> itemsList, GroceryItem item) {
-		GroceryItem groceryItem = itemsList.stream()
-				.filter(product -> product.getId() == item.getId())
-				.findFirst().orElse(null);
-		return null != groceryItem ? true : false; 
-	}
-
-	
 
 }

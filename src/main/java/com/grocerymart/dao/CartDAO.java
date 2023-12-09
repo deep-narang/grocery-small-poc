@@ -10,5 +10,5 @@ import com.grocerymart.entity.User;
 
 @Repository
 public interface CartDAO extends JpaRepository<Cart, Long> {
-	public Cart findByUser(User user);
+	public List<Cart> findByUserId(Long userId);
 }

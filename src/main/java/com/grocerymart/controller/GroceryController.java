@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -93,11 +94,13 @@ public class GroceryController {
 	}
 	
 	@PutMapping(value = ControllerConstant.UPDATE_CART)
+	@PreAuthorize(value = ControllerConstant.USER_AUTHORITY)
 	public boolean updateCart(@PathVariable Long productId, @RequestBody CartDTO cartDTO) {
 		return cartService.updateCart(productId, cartDTO);
 	}
 	
-	@PutMapping(value = ControllerConstant.REMOVE_FROM_CART)
+	@DeleteMapping(value = ControllerConstant.REMOVE_FROM_CART)
+	@PreAuthorize(value = ControllerConstant.USER_AUTHORITY)
 	public boolean removeFromCart(@PathVariable Long productId) {
 		return cartService.removeFromCart(productId);
 	}

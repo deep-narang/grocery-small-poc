@@ -42,28 +42,56 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public CartResponseDTO getCartItems() {
 		User user = userHelper.getLoggedInUser();
-		return cartHelper.getCartItems(cartDAO.findByUserId(user.getId()), user);
+		return cartHelper.getCartItems(cartDAO.findByUser(user), user);
 	}
 
 	@Override
 	@Transactional(value = TxType.REQUIRED)
 	public boolean addItemToCart(Long id, CartDTO cartDTO) {
-		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
-		if (groceryItem.isEmpty()) {
-			throw new GroceryItemNotFound(Constants.ITEM_NOT_FOUND);
-		}
-		GroceryItem item = groceryItem.get();
+		GroceryItem item = checkIfProductExists(id).get();
 		if (item.isOutOfStock()) {
 			throw new OutOfStock(Constants.OUT_OF_STOCK);
 		}
 		int quantity = Objects.nonNull(cartDTO) && Objects.nonNull(cartDTO.getQuantity()) ? cartDTO.getQuantity() : 1;
 		Cart cart = new Cart();
-		cart.setUserId(userHelper.getLoggedInUser().getId());
+		cart.setUser(userHelper.getLoggedInUser());
 		cart.setItem(item);
 		cart.setQuantity(quantity);
 		cartDAO.save(cart);
 
 		return true;
+	}
+
+	@Override
+	@Transactional(value = TxType.REQUIRED)
+	public boolean updateCart(Long productId, CartDTO cartDTO) {
+		GroceryItem groceryItem = checkIfProductExists(productId).get();
+		Cart cart = cartDAO.findByGroceryItemAndUser(groceryItem, userHelper.getLoggedInUser());
+		if (Objects.nonNull(cart)) {
+			cart.setQuantity(cartDTO.getQuantity());
+			cartDAO.save(cart); 
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removeFromCart(Long productId) {
+		GroceryItem groceryItem = checkIfProductExists(productId).get();
+		Cart cart = cartDAO.findByGroceryItemAndUser(groceryItem, userHelper.getLoggedInUser());
+		if (Objects.nonNull(cart)) {
+			cartDAO.delete(cart);
+			return true;
+		}
+		return false;
+	}
+	
+	private Optional<GroceryItem> checkIfProductExists(Long id) {
+		Optional<GroceryItem> groceryItem = groceryItemDAO.findById(id);
+		if (groceryItem.isEmpty()) {
+			throw new GroceryItemNotFound(Constants.ITEM_NOT_FOUND);
+		}
+		return groceryItem;
 	}
 
 }

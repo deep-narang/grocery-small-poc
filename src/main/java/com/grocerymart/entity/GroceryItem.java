@@ -35,7 +35,7 @@ public class GroceryItem implements Serializable{
 	@Column(name = "price", nullable = false)
 	private Double itemPrice;
 	
-	@Column(name = "in_stock", nullable = false)
+	@Column(name = "out_of_stock", nullable = false)
 	private boolean outOfStock;
 	
 	@Column(name = "inventory", nullable = false)

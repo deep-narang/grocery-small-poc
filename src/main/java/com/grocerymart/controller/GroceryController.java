@@ -91,5 +91,15 @@ public class GroceryController {
 	public List<UserDTO> getAllUsers() {
 		return userService.getAllUsers();
 	}
+	
+	@PutMapping(value = ControllerConstant.UPDATE_CART)
+	public boolean updateCart(@PathVariable Long productId, @RequestBody CartDTO cartDTO) {
+		return cartService.updateCart(productId, cartDTO);
+	}
+	
+	@PutMapping(value = ControllerConstant.REMOVE_FROM_CART)
+	public boolean removeFromCart(@PathVariable Long productId) {
+		return cartService.removeFromCart(productId);
+	}
 
 }

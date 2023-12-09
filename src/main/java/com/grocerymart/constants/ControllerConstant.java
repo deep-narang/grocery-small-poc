@@ -11,6 +11,8 @@ public class ControllerConstant {
 	public static final String ITEMS_IN_CART = "/cart/view";
 	public static final String ADD_ITEM_IN_CART = "/cart/add/{id}";
 	public static final String ALL_USERS = "/users";
+	public static final String UPDATE_CART = "/cart/update/{productId}";
+	public static final String REMOVE_FROM_CART = "/cart/remove/{productId}";
 	
 	public static final String ADMIN_AUTHORITY = "hasRole('ADMIN')";
 	public static final String USER_AUTHORITY = "hasRole('USER')";

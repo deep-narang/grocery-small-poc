@@ -9,4 +9,8 @@ public interface CartService {
 
 	boolean addItemToCart(Long id, CartDTO cartDTO);
 
+	boolean updateCart(Long productId, CartDTO cartDTO);
+
+	boolean removeFromCart(Long productId);
+
 }

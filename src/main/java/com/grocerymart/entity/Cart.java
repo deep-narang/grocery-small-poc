@@ -37,6 +37,6 @@ public class Cart {
 	
 	@ManyToOne
 	@JoinColumn(name = "item_id")
-	GroceryItem item;
+	GroceryItem groceryItem;
 
 }

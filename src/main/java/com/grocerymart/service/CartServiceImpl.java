@@ -55,7 +55,7 @@ public class CartServiceImpl implements CartService {
 		int quantity = Objects.nonNull(cartDTO) && Objects.nonNull(cartDTO.getQuantity()) ? cartDTO.getQuantity() : 1;
 		Cart cart = new Cart();
 		cart.setUser(userHelper.getLoggedInUser());
-		cart.setItem(item);
+		cart.setGroceryItem(item);
 		cart.setQuantity(quantity);
 		cartDAO.save(cart);
 

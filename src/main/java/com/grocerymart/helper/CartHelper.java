@@ -20,7 +20,7 @@ public class CartHelper {
 		cartResponseDTO.setUserName(user.getUserName());
 		cartResponseDTO.setRole(user.getRole().getRole());
 		cartResponseDTO.setGroceryItemDTOList(findByUser.stream().map(cart -> {
-			GroceryItem item = cart.getItem();
+			GroceryItem item = cart.getGroceryItem();
 			return GroceryItemDTO.builder()
 					.id(item.getId())
 					.itemName(item.getItemName())
